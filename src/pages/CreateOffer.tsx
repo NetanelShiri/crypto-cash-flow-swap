@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -13,7 +14,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeftIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const cryptoOptions = [
   { value: "BTC", label: "Bitcoin (BTC)" },
@@ -91,12 +93,16 @@ const CreateOffer = () => {
     try {
       setIsSubmitting(true);
       
+      if (!user?.id) {
+        throw new Error("You must be logged in to create an offer");
+      }
+      
       // Create new offer in Supabase
       const { data, error } = await supabase
         .from('offers')
         .insert([
           {
-            user_id: user?.id,
+            user_id: user.id,
             type: offerType,
             crypto_currency: cryptoCurrency,
             rate: parseFloat(rate),
@@ -131,7 +137,7 @@ const CreateOffer = () => {
     }
   };
   
-  return (
+  const renderContent = () => (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-grow bg-gray-50 py-8">
@@ -278,6 +284,8 @@ const CreateOffer = () => {
       <Footer />
     </div>
   );
+  
+  return <ProtectedRoute>{renderContent()}</ProtectedRoute>;
 };
 
 export default CreateOffer;
