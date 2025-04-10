@@ -1,6 +1,6 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -12,7 +12,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeftIcon } from "lucide-react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabase";
 
 const cryptoOptions = [
   { value: "BTC", label: "Bitcoin (BTC)" },
@@ -24,6 +25,7 @@ const cryptoOptions = [
 const CreateOffer = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
   
   const [offerType, setOfferType] = useState<"buy" | "sell">("buy");
   const [cryptoCurrency, setCryptoCurrency] = useState("");
@@ -31,6 +33,7 @@ const CreateOffer = () => {
   const [minAmount, setMinAmount] = useState("");
   const [maxAmount, setMaxAmount] = useState("");
   const [paymentMethods, setPaymentMethods] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   const handlePaymentMethodChange = (method: string) => {
     setPaymentMethods(current => 
@@ -40,7 +43,7 @@ const CreateOffer = () => {
     );
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validation checks
@@ -85,16 +88,47 @@ const CreateOffer = () => {
       return;
     }
     
-    // Submit form (in a real app, this would send data to the server)
-    toast({
-      title: "Offer created successfully",
-      description: "Your exchange offer has been created and is now live.",
-    });
-    
-    // Navigate back to exchange page
-    setTimeout(() => {
-      navigate("/exchange");
-    }, 1500);
+    try {
+      setIsSubmitting(true);
+      
+      // Create new offer in Supabase
+      const { data, error } = await supabase
+        .from('offers')
+        .insert([
+          {
+            user_id: user?.id,
+            type: offerType,
+            crypto_currency: cryptoCurrency,
+            rate: parseFloat(rate),
+            min_amount: parseFloat(minAmount),
+            max_amount: parseFloat(maxAmount),
+            payment_methods: paymentMethods,
+            status: 'active'
+          }
+        ])
+        .select();
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Offer created successfully",
+        description: "Your exchange offer has been created and is now live.",
+      });
+      
+      // Navigate back to exchange page
+      setTimeout(() => {
+        navigate("/exchange");
+      }, 1500);
+      
+    } catch (error: any) {
+      toast({
+        title: "Failed to create offer",
+        description: error.message || "An unexpected error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
   
   return (
@@ -232,8 +266,9 @@ const CreateOffer = () => {
                 <Button 
                   type="submit"
                   className="flex-1 sm:flex-none bg-brand-600 hover:bg-brand-700"
+                  disabled={isSubmitting}
                 >
-                  Create Offer
+                  {isSubmitting ? "Creating..." : "Create Offer"}
                 </Button>
               </CardFooter>
             </form>
