@@ -1,25 +1,17 @@
 
-import { createClient } from '@supabase/supabase-js';
+// This file is deprecated and should not be used.
+// Please use the official client from @/integrations/supabase/client instead.
 
-// Get environment variables for Supabase
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+import { supabase as officialClient } from "@/integrations/supabase/client";
 
-// Create a default Supabase client even if environment variables are missing
-// This will still show an error but won't crash the application
-export const supabase = createClient(
-  supabaseUrl || 'https://placeholder-url.supabase.co',
-  supabaseAnonKey || 'placeholder-key'
-);
+// Re-export the official client
+export const supabase = officialClient;
 
 // Helper function to check if Supabase is properly configured
 export const isSupabaseConfigured = () => {
-  return !!supabaseUrl && !!supabaseAnonKey;
+  return true; // Since we're using the official client, it's always configured
 };
 
-// Log configuration status
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error(
-    'Supabase configuration is missing. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment variables.'
-  );
-}
+console.warn(
+  'The supabase client in src/lib/supabase.ts is deprecated. Please import from "@/integrations/supabase/client" instead.'
+);
