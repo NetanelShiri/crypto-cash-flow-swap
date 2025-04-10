@@ -25,9 +25,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   useEffect(() => {
     // Check if Supabase is configured
-    setIsConfigured(isSupabaseConfigured());
+    const configured = isSupabaseConfigured();
+    setIsConfigured(configured);
 
-    if (!isSupabaseConfigured()) {
+    if (!configured) {
       console.warn('Supabase is not properly configured. Authentication features will not work.');
       setLoading(false);
       return;

@@ -16,19 +16,19 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   if (!isConfigured) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-4 text-center">
-        <h1 className="text-2xl font-bold text-red-600 mb-4">Configuration Error</h1>
+        <h1 className="text-2xl font-bold text-red-600 mb-4">Supabase Configuration Missing</h1>
         <p className="max-w-md mb-4">
-          Supabase environment variables are not properly configured. 
-          Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment.
+          Your Supabase environment variables are not set. To connect to Supabase, you need to:
         </p>
-        <a 
-          href="https://docs.lovable.dev/integrations/supabase/" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="text-blue-600 hover:underline"
-        >
-          Learn more about configuring Supabase
-        </a>
+        <ol className="text-left max-w-md space-y-2 mb-4">
+          <li>1. Open your Supabase project</li>
+          <li>2. Go to Project Settings &gt; API</li>
+          <li>3. Copy the URL and anon key</li>
+          <li>4. Set these values in your Lovable project settings</li>
+        </ol>
+        <p className="text-sm text-gray-600 mb-4">
+          In Lovable, environment variables are managed through the project settings, not through .env files.
+        </p>
       </div>
     );
   }
