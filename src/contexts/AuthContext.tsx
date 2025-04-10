@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Session, User } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
+import { supabase, isSupabaseConfigured } from '@/lib/supabase';
 import { useToast } from '@/hooks/use-toast';
 
 type AuthContextType = {
@@ -11,6 +11,7 @@ type AuthContextType = {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  isConfigured: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -19,13 +20,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isConfigured, setIsConfigured] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
+    // Check if Supabase is configured
+    setIsConfigured(isSupabaseConfigured());
+
+    if (!isSupabaseConfigured()) {
+      console.warn('Supabase is not properly configured. Authentication features will not work.');
+      setLoading(false);
+      return;
+    }
+
     // Get session on initial load
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      setLoading(false);
+    }).catch(error => {
+      console.error('Error getting session:', error);
       setLoading(false);
     });
 
@@ -42,6 +56,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signIn = async (email: string, password: string) => {
+    if (!isSupabaseConfigured()) {
+      toast({
+        title: "Configuration Error",
+        description: "Supabase is not properly configured. Please set the environment variables.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     try {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       
@@ -62,6 +85,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signUp = async (email: string, password: string) => {
+    if (!isSupabaseConfigured()) {
+      toast({
+        title: "Configuration Error",
+        description: "Supabase is not properly configured. Please set the environment variables.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     try {
       const { error } = await supabase.auth.signUp({ email, password });
       
@@ -82,6 +114,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signOut = async () => {
+    if (!isSupabaseConfigured()) {
+      return;
+    }
+    
     try {
       const { error } = await supabase.auth.signOut();
       
@@ -107,6 +143,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signIn,
     signUp,
     signOut,
+    isConfigured,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
