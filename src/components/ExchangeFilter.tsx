@@ -21,27 +21,27 @@ import { FilterIcon } from "lucide-react";
 interface ExchangeFilterProps {
   onFilterChange: (filters: {
     paymentMethod: string;
-    type: string;
+    crypto: string;
   }) => void;
 }
 
 const ExchangeFilter = ({ onFilterChange }: ExchangeFilterProps) => {
   const [paymentMethod, setPaymentMethod] = useState<string>("all");
-  const [type, setType] = useState<string>("all");
+  const [crypto, setCrypto] = useState<string>("all");
 
   const handleFilterApply = () => {
     onFilterChange({
       paymentMethod,
-      type
+      crypto
     });
   };
 
   const handleReset = () => {
     setPaymentMethod("all");
-    setType("all");
+    setCrypto("all");
     onFilterChange({
       paymentMethod: "all",
-      type: "all"
+      crypto: "all"
     });
   };
 
@@ -49,7 +49,7 @@ const ExchangeFilter = ({ onFilterChange }: ExchangeFilterProps) => {
     <Card className="shadow-sm">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg flex items-center">
-          <FilterIcon className="w-5 h-5 mr-2" /> Filter Offers
+          <FilterIcon className="w-5 h-5 mr-2" /> Filter Options
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -68,19 +68,23 @@ const ExchangeFilter = ({ onFilterChange }: ExchangeFilterProps) => {
         </div>
 
         <div className="space-y-2">
-          <Label>Offer Type</Label>
-          <RadioGroup value={type} onValueChange={setType} className="flex flex-col space-y-1">
+          <Label>Cryptocurrency</Label>
+          <RadioGroup value={crypto} onValueChange={setCrypto} className="flex flex-col space-y-1">
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="all" id="all" />
-              <Label htmlFor="all" className="font-normal cursor-pointer">All offers</Label>
+              <RadioGroupItem value="all" id="all-crypto" />
+              <Label htmlFor="all-crypto" className="font-normal cursor-pointer">All cryptocurrencies</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="buy" id="buy" />
-              <Label htmlFor="buy" className="font-normal cursor-pointer">Buy Crypto</Label>
+              <RadioGroupItem value="BTC" id="btc" />
+              <Label htmlFor="btc" className="font-normal cursor-pointer">Bitcoin (BTC)</Label>
             </div>
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="sell" id="sell" />
-              <Label htmlFor="sell" className="font-normal cursor-pointer">Sell Crypto</Label>
+              <RadioGroupItem value="ETH" id="eth" />
+              <Label htmlFor="eth" className="font-normal cursor-pointer">Ethereum (ETH)</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="LTC" id="ltc" />
+              <Label htmlFor="ltc" className="font-normal cursor-pointer">Litecoin (LTC)</Label>
             </div>
           </RadioGroup>
         </div>

@@ -9,15 +9,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Exchange = () => {
   const [activeFilters, setActiveFilters] = useState({
-    paymentMethod: "",
-    type: ""
+    paymentMethod: "all",
+    crypto: "all"
   });
 
-  const handleFilterChange = (filters: { paymentMethod: string; type: string }) => {
+  const handleFilterChange = (filters: { paymentMethod: string; crypto: string }) => {
     setActiveFilters(filters);
   };
 
-  const displayedOffers = filteredOffers(activeFilters.paymentMethod, activeFilters.type);
+  // Filter offers based on payment method and crypto
+  const displayedOffers = filteredOffers(activeFilters.paymentMethod, activeFilters.crypto);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -25,31 +26,37 @@ const Exchange = () => {
       <main className="flex-grow bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Exchange Marketplace</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Sell Your Crypto</h1>
             <p className="mt-2 text-lg text-gray-600">
-              Browse all available offers for crypto, PayPal, and Skrill exchanges
+              Quick and secure way to exchange your cryptocurrency for PayPal or Skrill
             </p>
           </div>
 
           <Tabs defaultValue="all" className="w-full mb-8">
-            <TabsList className="grid w-full grid-cols-3 max-w-md mx-auto">
-              <TabsTrigger value="all">All Offers</TabsTrigger>
-              <TabsTrigger value="buy">Buy Crypto</TabsTrigger>
-              <TabsTrigger value="sell">Sell Crypto</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-4 max-w-lg mx-auto">
+              <TabsTrigger value="all">All Cryptos</TabsTrigger>
+              <TabsTrigger value="BTC">Bitcoin</TabsTrigger>
+              <TabsTrigger value="ETH">Ethereum</TabsTrigger>
+              <TabsTrigger value="LTC">Litecoin</TabsTrigger>
             </TabsList>
             <TabsContent value="all">
               <p className="text-center text-gray-600 mb-6">
-                Showing all available exchange offers
+                View all available cryptocurrencies we accept
               </p>
             </TabsContent>
-            <TabsContent value="buy">
+            <TabsContent value="BTC">
               <p className="text-center text-gray-600 mb-6">
-                Exchange your PayPal or Skrill for cryptocurrency
+                Exchange your Bitcoin (BTC) for PayPal or Skrill
               </p>
             </TabsContent>
-            <TabsContent value="sell">
+            <TabsContent value="ETH">
               <p className="text-center text-gray-600 mb-6">
-                Sell your cryptocurrency for PayPal or Skrill
+                Exchange your Ethereum (ETH) for PayPal or Skrill
+              </p>
+            </TabsContent>
+            <TabsContent value="LTC">
+              <p className="text-center text-gray-600 mb-6">
+                Exchange your Litecoin (LTC) for PayPal or Skrill
               </p>
             </TabsContent>
           </Tabs>
@@ -59,6 +66,16 @@ const Exchange = () => {
               <ExchangeFilter onFilterChange={handleFilterChange} />
             </div>
             <div className="lg:col-span-3">
+              <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+                <h2 className="text-xl font-semibold mb-4">How It Works</h2>
+                <ol className="list-decimal pl-5 space-y-2">
+                  <li>Select the cryptocurrency you want to sell</li>
+                  <li>Choose your preferred payment method (PayPal or Skrill)</li>
+                  <li>Follow the instructions to securely transfer your crypto</li>
+                  <li>Receive payment to your PayPal or Skrill account</li>
+                </ol>
+              </div>
+              
               {displayedOffers.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {displayedOffers.map((offer) => (
@@ -67,9 +84,9 @@ const Exchange = () => {
                 </div>
               ) : (
                 <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">No offers found</h3>
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">No options available</h3>
                   <p className="text-gray-600">
-                    We couldn't find any offers matching your current filters. Try adjusting your filter criteria.
+                    We couldn't find any exchange options matching your current filters. Try adjusting your filter criteria.
                   </p>
                 </div>
               )}

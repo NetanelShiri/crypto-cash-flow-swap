@@ -4,22 +4,22 @@ import { OfferProps } from "@/components/OfferCard";
 export const featuredOffers: OfferProps[] = [
   {
     id: "offer-1",
-    type: "buy",
+    type: "sell",
     from: {
-      name: "USD",
-      amount: 100,
-      icon: "$"
-    },
-    to: {
       name: "BTC",
       amount: 0.0025,
       icon: "₿"
     },
+    to: {
+      name: "USD",
+      amount: 100,
+      icon: "$"
+    },
     rate: 40000,
     seller: {
-      name: "CryptoKing",
-      rating: 4.9,
-      trades: 356
+      name: "Admin",
+      rating: 5.0,
+      trades: 500
     },
     limits: {
       min: 50,
@@ -42,9 +42,9 @@ export const featuredOffers: OfferProps[] = [
     },
     rate: 1900,
     seller: {
-      name: "EtherQueen",
-      rating: 4.8,
-      trades: 215
+      name: "Admin",
+      rating: 5.0,
+      trades: 500
     },
     limits: {
       min: 100,
@@ -54,25 +54,25 @@ export const featuredOffers: OfferProps[] = [
   },
   {
     id: "offer-3",
-    type: "buy",
+    type: "sell",
     from: {
-      name: "EUR",
-      amount: 500,
-      icon: "€"
+      name: "BTC",
+      amount: 0.0025,
+      icon: "₿"
     },
     to: {
-      name: "ETH",
-      amount: 0.25,
-      icon: "Ξ"
+      name: "EUR",
+      amount: 90,
+      icon: "€"
     },
-    rate: 2000,
+    rate: 36000,
     seller: {
-      name: "CryptoTrade",
-      rating: 4.7,
-      trades: 189
+      name: "Admin",
+      rating: 5.0,
+      trades: 500
     },
     limits: {
-      min: 100,
+      min: 50,
       max: 3000
     },
     paymentMethods: ["PayPal", "Skrill"]
@@ -81,24 +81,24 @@ export const featuredOffers: OfferProps[] = [
     id: "offer-4",
     type: "sell",
     from: {
-      name: "BTC",
-      amount: 0.01,
-      icon: "₿"
+      name: "LTC",
+      amount: 1,
+      icon: "Ł"
     },
     to: {
       name: "USD",
-      amount: 400,
+      amount: 120,
       icon: "$"
     },
-    rate: 40000,
+    rate: 120,
     seller: {
-      name: "BitcoinPro",
+      name: "Admin",
       rating: 5.0,
-      trades: 423
+      trades: 500
     },
     limits: {
-      min: 200,
-      max: 4000
+      min: 25,
+      max: 1000
     },
     paymentMethods: ["PayPal"]
   }
@@ -108,25 +108,25 @@ export const allOffers: OfferProps[] = [
   ...featuredOffers,
   {
     id: "offer-5",
-    type: "buy",
+    type: "sell",
     from: {
-      name: "USD",
-      amount: 300,
-      icon: "$"
+      name: "ETH",
+      amount: 0.25,
+      icon: "Ξ"
     },
     to: {
-      name: "LTC",
-      amount: 2.5,
-      icon: "Ł"
+      name: "EUR",
+      amount: 425,
+      icon: "€"
     },
-    rate: 120,
+    rate: 1700,
     seller: {
-      name: "LiteLover",
-      rating: 4.5,
-      trades: 83
+      name: "Admin",
+      rating: 5.0,
+      trades: 500
     },
     limits: {
-      min: 100,
+      min: 85,
       max: 1500
     },
     paymentMethods: ["Skrill"]
@@ -135,49 +135,49 @@ export const allOffers: OfferProps[] = [
     id: "offer-6",
     type: "sell",
     from: {
-      name: "XRP",
-      amount: 1000,
-      icon: "✕"
+      name: "LTC",
+      amount: 2,
+      icon: "Ł"
     },
     to: {
-      name: "EUR",
-      amount: 450,
-      icon: "€"
+      name: "USD",
+      amount: 240,
+      icon: "$"
     },
-    rate: 0.45,
+    rate: 120,
     seller: {
-      name: "RippleTrader",
-      rating: 4.6,
-      trades: 175
+      name: "Admin",
+      rating: 5.0,
+      trades: 500
     },
     limits: {
       min: 50,
-      max: 2500
+      max: 2000
     },
     paymentMethods: ["PayPal"]
   },
   {
     id: "offer-7",
-    type: "buy",
+    type: "sell",
     from: {
-      name: "GBP",
-      amount: 200,
-      icon: "£"
-    },
-    to: {
       name: "BTC",
-      amount: 0.005,
+      amount: 0.001,
       icon: "₿"
     },
-    rate: 40000,
+    to: {
+      name: "GBP",
+      amount: 32,
+      icon: "£"
+    },
+    rate: 32000,
     seller: {
-      name: "UKCrypto",
-      rating: 4.7,
-      trades: 124
+      name: "Admin",
+      rating: 5.0,
+      trades: 500
     },
     limits: {
-      min: 100,
-      max: 3000
+      min: 32,
+      max: 1600
     },
     paymentMethods: ["PayPal", "Skrill"]
   },
@@ -186,33 +186,33 @@ export const allOffers: OfferProps[] = [
     type: "sell",
     from: {
       name: "ETH",
-      amount: 0.75,
+      amount: 0.1,
       icon: "Ξ"
     },
     to: {
       name: "USD",
-      amount: 1425,
+      amount: 190,
       icon: "$"
     },
     rate: 1900,
     seller: {
-      name: "EtherGenius",
-      rating: 4.9,
-      trades: 256
+      name: "Admin",
+      rating: 5.0,
+      trades: 500
     },
     limits: {
-      min: 200,
-      max: 5000
+      min: 95,
+      max: 1900
     },
     paymentMethods: ["Skrill"]
   }
 ];
 
-export const filteredOffers = (paymentMethod?: string, type?: string): OfferProps[] => {
+export const filteredOffers = (paymentMethod?: string, crypto?: string): OfferProps[] => {
   return allOffers.filter((offer) => {
-    const matchesPaymentMethod = !paymentMethod || offer.paymentMethods.includes(paymentMethod);
-    const matchesType = !type || offer.type === type;
-    return matchesPaymentMethod && matchesType;
+    const matchesPaymentMethod = !paymentMethod || paymentMethod === "all" || offer.paymentMethods.includes(paymentMethod);
+    const matchesCrypto = !crypto || crypto === "all" || offer.from.name === crypto;
+    return matchesPaymentMethod && matchesCrypto;
   });
 };
 
