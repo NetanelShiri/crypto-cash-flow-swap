@@ -26,8 +26,8 @@ interface ExchangeFilterProps {
 }
 
 const ExchangeFilter = ({ onFilterChange }: ExchangeFilterProps) => {
-  const [paymentMethod, setPaymentMethod] = useState<string>("");
-  const [type, setType] = useState<string>("");
+  const [paymentMethod, setPaymentMethod] = useState<string>("all");
+  const [type, setType] = useState<string>("all");
 
   const handleFilterApply = () => {
     onFilterChange({
@@ -37,11 +37,11 @@ const ExchangeFilter = ({ onFilterChange }: ExchangeFilterProps) => {
   };
 
   const handleReset = () => {
-    setPaymentMethod("");
-    setType("");
+    setPaymentMethod("all");
+    setType("all");
     onFilterChange({
-      paymentMethod: "",
-      type: ""
+      paymentMethod: "all",
+      type: "all"
     });
   };
 
@@ -60,7 +60,7 @@ const ExchangeFilter = ({ onFilterChange }: ExchangeFilterProps) => {
               <SelectValue placeholder="All payment methods" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All payment methods</SelectItem>
+              <SelectItem value="all">All payment methods</SelectItem>
               <SelectItem value="PayPal">PayPal</SelectItem>
               <SelectItem value="Skrill">Skrill</SelectItem>
             </SelectContent>
@@ -71,7 +71,7 @@ const ExchangeFilter = ({ onFilterChange }: ExchangeFilterProps) => {
           <Label>Offer Type</Label>
           <RadioGroup value={type} onValueChange={setType} className="flex flex-col space-y-1">
             <div className="flex items-center space-x-2">
-              <RadioGroupItem value="" id="all" />
+              <RadioGroupItem value="all" id="all" />
               <Label htmlFor="all" className="font-normal cursor-pointer">All offers</Label>
             </div>
             <div className="flex items-center space-x-2">
