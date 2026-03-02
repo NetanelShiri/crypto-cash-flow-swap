@@ -58,8 +58,12 @@ SHORT_SENTIMENT = 40      # < 40% positive
 TAKE_PROFIT_PCT = 10.0   # +10% from current price
 STOP_LOSS_PCT = 5.0      # -5% from current price
 
-# SQLite database path
-DB_PATH = "crypto_sentinel/data/sentinel.db"
+# SQLite database path — use /tmp on Streamlit Cloud (ephemeral but writable)
+import os as _os
+if _os.environ.get("STREAMLIT_SERVER_HEADLESS") or _os.path.exists("/mount/src"):
+    DB_PATH = "/tmp/crypto_sentinel/sentinel.db"
+else:
+    DB_PATH = "crypto_sentinel/data/sentinel.db"
 
 # Update interval in minutes
 UPDATE_INTERVAL = 60

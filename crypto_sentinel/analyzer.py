@@ -173,19 +173,26 @@ def run_full_analysis(progress_callback=None) -> list[dict]:
 
         results.append(result)
 
-        # Save to DB
-        save_analysis(result)
+        # Save to DB (non-critical — don't crash if it fails)
+        try:
+            save_analysis(result)
+        except Exception:
+            pass
 
         # Check for alerts (>10% change)
-        if abs(coin_row["change_24h_pct"] or 0) > 10:
-            alert_msg = (
-                f"⚠️ {symbol} moved {coin_row['change_24h_pct']:.1f}% in 24h! "
-                f"Price: ${coin_row['price']:,.2f}"
-            )
-            save_alert(coin_id, symbol, "price_spike", alert_msg)
+        try:
+            if abs(coin_row["change_24h_pct"] or 0) > 10:
+                alert_msg = (
+                    f"⚠️ {symbol} moved {coin_row['change_24h_pct']:.1f}% in 24h! "
+                    f"Price: ${coin_row['price']:,.2f}"
+                )
+                save_alert(coin_id, symbol, "price_spike", alert_msg)
+        except Exception:
+            pass
 
-        # Rate limiting for CoinGecko free API
-        time.sleep(1.5)
+        # Rate limiting for CoinGecko free API (skip for demo data)
+        if not using_demo:
+            time.sleep(1.5)
 
     if progress_callback:
         progress_callback(4, 4, "ניתוח הושלם!")

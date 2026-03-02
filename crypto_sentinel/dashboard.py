@@ -39,13 +39,21 @@ if st.sidebar.button("🔄 הרץ ניתוח חדש", type="primary"):
         status_text = st.empty()
 
         def update_progress(current, total, message):
-            progress_bar.progress(current / total if total > 0 else 0)
-            status_text.text(message)
+            try:
+                progress_bar.progress(min(current / total, 1.0) if total > 0 else 0)
+                status_text.text(message)
+            except Exception:
+                pass
 
-        results = run_full_analysis(progress_callback=update_progress)
-        progress_bar.progress(1.0)
-        status_text.text("✅ הניתוח הושלם!")
-        st.session_state["results"] = results
+        try:
+            results = run_full_analysis(progress_callback=update_progress)
+            progress_bar.progress(1.0)
+            status_text.text("✅ הניתוח הושלם!")
+            st.session_state["results"] = results
+        except Exception as e:
+            progress_bar.empty()
+            status_text.empty()
+            st.error(f"שגיאה בניתוח: {e}")
 
 st.sidebar.markdown("---")
 st.sidebar.markdown("⚠️ **זה לא ייעוץ השקעות**")
@@ -56,10 +64,13 @@ results = st.session_state.get("results", None)
 
 # Try loading from DB if no fresh results
 if results is None:
-    db_results = get_latest_analysis(limit=20)
-    if db_results:
-        results = db_results
-        st.info("📊 מציג נתונים מהניתוח האחרון שנשמר. לחץ 'הרץ ניתוח חדש' לעדכון.")
+    try:
+        db_results = get_latest_analysis(limit=20)
+        if db_results:
+            results = db_results
+            st.info("📊 מציג נתונים מהניתוח האחרון שנשמר. לחץ 'הרץ ניתוח חדש' לעדכון.")
+    except Exception:
+        pass  # DB might not exist yet — that's fine
 
 if results:
     # Fear & Greed
@@ -217,11 +228,14 @@ if results:
     # Alerts
     st.markdown("---")
     st.subheader("🚨 התראות")
-    alerts = get_recent_alerts(limit=20)
-    if alerts:
-        for alert in alerts:
-            st.warning(f"**{alert['symbol']}** [{alert['timestamp'][:16]}] — {alert['message']}")
-    else:
+    try:
+        alerts = get_recent_alerts(limit=20)
+        if alerts:
+            for alert in alerts:
+                st.warning(f"**{alert['symbol']}** [{alert['timestamp'][:16]}] — {alert['message']}")
+        else:
+            st.success("אין התראות פעילות.")
+    except Exception:
         st.success("אין התראות פעילות.")
 
 else:
