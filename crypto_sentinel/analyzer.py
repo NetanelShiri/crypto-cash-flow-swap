@@ -99,10 +99,13 @@ def run_full_analysis(progress_callback=None) -> list[dict]:
         market_data = get_demo_market_df()
         using_demo = True
 
-    # Step 2: Fetch Fear & Greed Index
+    # Step 2: Fetch Fear & Greed Index (skip if API already failed)
     if progress_callback:
         progress_callback(1, 4, "שולף Fear & Greed Index...")
-    fg = fetch_fear_greed_index()
+    if using_demo:
+        fg = {"value": 50, "classification": "Neutral"}
+    else:
+        fg = fetch_fear_greed_index()
 
     # Step 3: Analyze each coin
     total_coins = len(COIN_IDS)

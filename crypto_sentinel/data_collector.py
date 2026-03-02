@@ -109,19 +109,19 @@ def fetch_oil_price() -> Optional[float]:
     return None
 
 
-def _request_with_retry(url: str, params: dict = None, max_retries: int = 3) -> Optional[requests.Response]:
+def _request_with_retry(url: str, params: dict = None, max_retries: int = 2) -> Optional[requests.Response]:
     """Make HTTP request with exponential backoff retry."""
     for attempt in range(max_retries):
         try:
-            resp = requests.get(url, params=params, timeout=15)
+            resp = requests.get(url, params=params, timeout=5)
             if resp.status_code == 200:
                 return resp
             if resp.status_code == 429:
-                wait = 2 ** (attempt + 1)
+                wait = 2 ** attempt
                 time.sleep(wait)
                 continue
             resp.raise_for_status()
         except requests.RequestException:
             if attempt < max_retries - 1:
-                time.sleep(2 ** (attempt + 1))
+                time.sleep(1)
     return None
