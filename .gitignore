@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# CryptoSentinel
+crypto_sentinel/data/
+__pycache__/
+*.pyc
